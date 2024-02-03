@@ -2,27 +2,27 @@
 import { useForm } from 'react-hook-form';
 import { boolean, z } from 'zod';
 import { } from '@/components/ui/form'
-import { Button, buttonVariants } from './ui/button';
-import { Input } from './ui/input';
-import { Icons } from './icons';
-import { Label } from './ui/label';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Icons } from '@/components/icons';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useToast } from './ui/use-toast';
-import { Toaster } from './ui/toaster';
+import { useToast } from '@/components/ui/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 import Link from 'next/link';
 import axs from 'axios';
 import logIn  from '@/app/api/logIn';
 import _ from 'underscore';
 import { useRouter } from 'next/navigation';
-import OrgRegistration from './OrgRegistration';
+import OrgRegistration from '@/components/OrgRegistration';
 const axios  = axs.create({
     withCredentials: true,
 });
 
 
 const userSchema = z.object({
-    name: z.string().max(10,'Maximum length can be 10 characters.'),
+    name: z.string().max(20,'Maximum length can be 20 characters.'),
     email: z.string().email(),
     password: z.string().min(4, 'Minimum length must be 4 characters.'),
     confirmPassword: z.string(),
@@ -100,7 +100,7 @@ function SignUpForm() {
                             </Label>
                             <Input
                                 {...register('name', { required: "name is required.", })}
-                                placeholder="user_name"
+                                placeholder="Organisation name"
                                 type="text"
                                 disabled={isSubmitting}
                                 required={true}
@@ -177,7 +177,7 @@ function SignUpForm() {
                 </Button>
                 <Toaster></Toaster>
             </div>
-            <OrgRegistration/>
+            <OrgRegistration></OrgRegistration>
         </>
     )
 }

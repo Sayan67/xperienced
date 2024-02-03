@@ -22,7 +22,7 @@ const axios  = axs.create({
 
 
 const userSchema = z.object({
-    name: z.string().max(10,'Maximum length can be 10 characters.'),
+    name: z.string().max(20,'Maximum length can be 20 characters.'),
     email: z.string().email(),
     password: z.string().min(4, 'Minimum length must be 4 characters.'),
     confirmPassword: z.string(),
@@ -100,7 +100,7 @@ function SignUpForm() {
                             </Label>
                             <Input
                                 {...register('name', { required: "name is required.", })}
-                                placeholder="user_name"
+                                placeholder="Organisation name"
                                 type="text"
                                 disabled={isSubmitting}
                                 required={true}
@@ -177,7 +177,7 @@ function SignUpForm() {
                 </Button>
                 <Toaster></Toaster>
             </div>
-            <OrgRegistration/>
+            <OrgRegistration></OrgRegistration>
         </>
     )
 }
