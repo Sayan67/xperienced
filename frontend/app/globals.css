@@ -71,6 +71,16 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground bg-slate-50;
+  }
+}
+
+@layer components {
+  .pos-btn {
+    @apply font-secondary tracking-wider text-lg font-semibold py-3 px-4 shadow-none bg-blue-500 text-white rounded-lg;
+  }
+
+  .neg-btn {
+    @apply font-secondary tracking-wider text-lg py-3 px-4 shadow-none border-[1px] border-solid border-neutral-300 bg-neutral-100 text-neutral-600 rounded-lg;
   }
 }

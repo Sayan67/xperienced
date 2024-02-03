@@ -10,6 +10,11 @@ const config = {
 	],
   prefix: "",
   theme: {
+    fontFamily: {
+      primary: ['Inter'],
+      secondary: ['Inter Tight'],
+      tertiary: ['Lexend']
+    },
     container: {
       center: true,
       padding: "2rem",
