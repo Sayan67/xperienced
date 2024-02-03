@@ -177,7 +177,7 @@ function SignUpForm() {
                 </Button>
                 <Toaster></Toaster>
             </div>
-            <OrgRegistration/>
+            {/* <OrgRegistration/> */}
         </>
     )
 }
