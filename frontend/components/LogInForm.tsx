@@ -50,7 +50,7 @@ function SignUpForm() {
     const onSubmit = async (data: TSuserSchema) => {
         //Sending to the server
         try {
-            const response = await axios.post('http://localhost:8000/api/auth', data);
+            const response = await axios.post('http://localhost:8000/api/auth?type=u', data, {withCredentials: true});
             console.log(response.data);
             if (!response.data.ok) {
                 toast({
@@ -64,7 +64,7 @@ function SignUpForm() {
             toast({
                 title: "Login successfull!",
             })
-            router.push('/organisation');
+            router.push('/dashboard');
         } catch (err) {
             console.log(err);
             toast({

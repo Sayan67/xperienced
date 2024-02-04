@@ -21,7 +21,7 @@ export default function LogInPage() {
 
           {/* Theme button */}
           <div className="absolute right-[1rem] top-4 md:right-8 md:top-10">
-          <ModeToggle/>
+            <ModeToggle />
           </div>
 
           {/* Create Account form */}
@@ -36,7 +36,7 @@ export default function LogInPage() {
                 </p>
               </div>
               {/* <UserAuthForm /> */}
-              <LogInForm/>
+              <LogInForm />
               <p className="px-8 text-center text-sm text-muted-foreground">
                 By clicking continue, you agree to our{" "}
                 <Link

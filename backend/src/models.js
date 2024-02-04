@@ -49,7 +49,7 @@ export const Recruiter = mongoose.model('Recruiter', new Schema({
     description: {type: String, default: ''},
     site_url: String,
     password: String,
-    verified: Boolean,
+    verified: { type: Boolean, default: false },
 }));
 
 export const Offer = mongoose.model('Offer', new Schema({

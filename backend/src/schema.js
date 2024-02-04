@@ -39,13 +39,18 @@ export const OfferSchema = {
         title: { type: 'string' },
         description: { type: 'string' },
         is_remote: { type: 'boolean' },
+        location: { type: 'string' },
         schedule: {
-            start: { type: 'string' },
-            end: { type: 'string' },
-            is_negotiable: { type: 'boolean' },
-            duration: { type: 'number' },
-            days_per_week: { type: 'number' },
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+                start: { type: 'string' },
+                end: { type: 'string' },
+                is_negotiable: { type: 'boolean' },
+                duration: { type: 'number' },
+                days_per_week: { type: 'number' },
+            }
         },
-        location: String,
-    }
+    },
+    additionalProperties: false,
 }
