@@ -19,7 +19,6 @@ export default function OthersPage() {
 
     return (
         <div>
-            <OrgSiteNav active="/home" />
             <div className='flex-grow mb-8'>
                 <OrgSubNav url='/organisation/offers'>
                     <button className="flex items-center gap-2 font-primary bg-blue-500 text-white p-2 px-4 rounded" onClick={_ => setCreateOfferOpen(true)}>

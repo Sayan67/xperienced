@@ -1,12 +1,12 @@
 'use client'
 
-import { useUser } from "@/api/auth"
+import { useUser, useRecruiter } from "@/api/auth"
 import { useContext } from "react"
 import { Icons } from "./icons";
 import ProfileCard from "./ProfileCard";
 
-export default function SiteNav({ active, actions }: { active: string, actions: Array<{ name: string, href: string }> }) {
-    const { error, isLoading, data } = useUser();
+export default function SiteNav({ active, actions, isr = false }: { active: string, actions: Array<{ name: string, href: string }>, isr?: boolean }) {
+    const { error, isLoading, data } = isr ? useRecruiter() : useUser();    
 
     return (
         <nav className='flex items-center justify-between py-4 bg-white border-b-[1px] border-neutral-300 px-12'>
@@ -52,8 +52,8 @@ function ProfileSection({ user } : { user: any }) {
         <ProfileCard data={user} />
         :
         <div className='flex gap-4 text-lg font-secondary'>
-            <button className='border-[1px] border-neutral-300 px-4 py-2 rounded tracking-wider text-neutral-600 text-base'>Log In</button>
-            <button className='bg-blue-500  px-4 py-2 rounded text-white tracking-wider'>Join</button>
+            <a className='border-[1px] border-neutral-300 px-4 py-2 rounded tracking-wider text-neutral-600 text-base' href="/login">Log In</a>
+            <a className='bg-blue-500  px-4 py-2 rounded text-white tracking-wider' href='/join'>Join</a>
         </div>
     );
 }
