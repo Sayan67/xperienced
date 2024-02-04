@@ -94,6 +94,14 @@ app.use(mid.authenticatedOnly());
 app.use(mid.useUser());
 app.use(mid.useRecruiter());
 
+app.get('/api/signout',
+async (req, res) => {
+    const { session } = req;
+    await session.deleteOne();
+    res.cookie('auth_token', '', { maxAge: 0 });
+    return res.json({ ok: true });
+});
+
 app.get('/api/ping/1', 
     mid.needUser(),
 (req, res) => {
