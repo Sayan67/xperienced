@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { CiMail, CiLink, CiEdit } from "react-icons/ci";
 import OrgProfileEdit from "@/components/OrgProfileEdit";
+import { useRouter } from "next/navigation";
 
 //Demo data
 let userInfo = [
@@ -57,10 +58,60 @@ async function getUserData() {
 }
 
 function page() {
+
+  //Router
+  const router = useRouter();
+
   const [isEditing, setIsEditing] = React.useState(false);
   useEffect(() => {
     setIsEditing(false);
   }, []);
+
+  //Function to convert image to base64
+
+  const convertBase64 = (file:any) => new Promise((resolve, reject) => {
+    file = file[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+
+  // const convertBase64 =(file:any) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsDataURL(file);
+
+  //     fileReader.onload = () => {
+  //       resolve(fileReader.result);
+  //     };
+
+  //     fileReader.onerror = (error) => {
+  //       reject(error);
+  //     };
+  //   });
+  // };
+
+
+  function uploadSingleImage(base64:any) {
+    axios
+      .post("http://localhost:8000/api/company/edit/avatar",{ image: base64 },{headers:{crossDomain:true}})
+      .then((res) => {
+        console.log(res.data);
+        alert("Image uploaded Succesfully");
+      })
+      // .then(router.push("http://localhost:3000/organisations/orgprofile"))
+      .catch(console.log);
+  }
+
+
+  const uploadImage = async (event:React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+      const base64 = await convertBase64(files);
+      uploadSingleImage(base64);
+      return;
+  }
 
   return (
     <>
@@ -79,8 +130,10 @@ function page() {
               src="/images/user.jpg"
               className=" w-[10rem] h-[10rem] md:w-[15rem] md:h-[15rem] lg:w-[20rem] lg:h-[20rem] rounded-full border-[2px]  border-slate-500"
             ></AvatarImage>
-            <div className=" bg-slate-300 rounded-full p-2 -translate-y-4 cursor-pointer shadow-md hover:bg-slate-400">
-              <CiEdit size={20} />
+            <div className=" bg-slate-300 w-fit rounded-full p-2 -translate-y-4 cursor-pointer shadow-md hover:bg-slate-400">
+            <div className="file_button_container w-fit"><input onChange={(e)=>uploadImage(e)} type="file" /></div>
+              {/* <input type="file" onChange={(e)=>uploadImage(e)} className="rounded-full bg-slate-400 w-3"/> */}
+              {/* <CiEdit size={20} /> */}
             </div>
           </Avatar>
           {isEditing ? 

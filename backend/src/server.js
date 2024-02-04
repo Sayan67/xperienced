@@ -10,7 +10,7 @@ import * as mid from './middleware.js';
 import { ProfileEditSchema, JoinSchema } from './schema.js'
 import { StatusCodes } from 'http-status-codes'
 import dotenv from 'dotenv'
-
+import imagedb from './imagedb.js';
 const ajv = new Ajv();
 
 // Load the configuration file
@@ -27,6 +27,10 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+})
 
 app.post("/api/join", async (req, res) => {
     if (!ajv.validate(JoinSchema, req.body)) {
@@ -130,6 +134,19 @@ async (req, res) => {
 // Sends a job offer to an user on behalf of the company
 app.post('/api/offer', async (req, res) => {
     
+    
 });
+
+//uoploads the avatar of the company
+app.post('/api/company/edit/avatar', 
+    async (req,res)=>{
+        imagedb(req.body.image).then((url)=>{
+            res.send(url);
+        })
+        .catch((err)=>{
+            res.status(500).send(err);
+        })
+    
+})
 
 app.listen(8000, () => console.log(`successfully listening at ${8000}`))
