@@ -27,10 +27,6 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
-app.use((req,res,next)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-})
 
 app.post("/api/join", async (req, res) => {
     if (!ajv.validate(JoinSchema, req.body)) {
