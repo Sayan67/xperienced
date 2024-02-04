@@ -49,7 +49,7 @@ function SignUpForm() {
     const onSubmit = async (data: TSuserSchema) => {
         //Sending to the server
         try {
-            const response = await axios.post('http://localhost:8000/api/auth?=r', data);
+            const response = await axios.post('http://localhost:8000/api/auth?type=r', data);
             console.log(response.data);
             if (!response.data.ok) {
                 toast({
@@ -118,7 +118,7 @@ function SignUpForm() {
                 </form>
                 <div className='flex justify-center'>
 
-                    <p>Don't have an account?<Link className=' ml-1 text-primary font-bold' href={'/signup'}> Sign Up!</Link></p>
+                    <p>Didn't Registered your Organisation?<Link className=' ml-1 text-primary font-bold' href={'/signup'}> Sign Up!</Link></p>
                 </div>
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">

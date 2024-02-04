@@ -58,7 +58,7 @@ function SignUpForm() {
 
         //Sending to the server
         try{
-           const response = await axios.post('http://localhost:8000/api/join',_.pick(data,'name','email','password'));
+           const response = await axios.post('http://localhost:8000/api/company/join',_.pick(data,'name','email','password'));
            if (!response.data.ok) {
                toast({
                    variant: "destructive",
@@ -72,11 +72,7 @@ function SignUpForm() {
                 title: "User Creation seccessful!",
                 description: "Now you can login with your email and password.",
             })
-            const res = logIn(data);
-            if(await res){
-                router.push('/home');
-            }
-            reset();
+            axios.post('http://localhost:8000/api/auth?type=r',_.pick(data,'email','password'));
         }
         catch(err){
             console.log(err);
