@@ -1,46 +1,37 @@
-'use client'
+"use client"
+import React, { use, useState,useEffect } from 'react';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { boolean, z } from 'zod';
+import { z } from 'zod';
 import { } from '@/components/ui/form'
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Icons } from '@/components/icons';
-import { Label } from '@/components/ui/label';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Icons } from './icons';
+import { Label } from './ui/label';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useToast } from '@/components/ui/use-toast';
-import { Toaster } from '@/components/ui/toaster';
-import Link from 'next/link';
-import axs from 'axios';
-import logIn  from '@/app/api/logIn';
-import _ from 'underscore';
-import { useRouter } from 'next/navigation';
-import OrgRegistration from '@/components/OrgRegistration';
-const axios  = axs.create({
-    withCredentials: true,
-});
+import { useToast } from './ui/use-toast';
+import { Toaster } from './ui/toaster';
+import axios from 'axios';
+import { useRouter,redirect } from 'next/navigation';
+
 
 
 const userSchema = z.object({
-    name: z.string().max(20,'Maximum length can be 20 characters.'),
     email: z.string().email(),
     password: z.string().min(4, 'Minimum length must be 4 characters.'),
-    confirmPassword: z.string(),
-})
-.refine((data) => data.confirmPassword === data.password, {
-    message: "Passwords must match!",
-    path: ["confirmPassword"],
 })
 
-// Type of the user Schema. 
+//Type of the user Schema. 
 type TSuserSchema = z.infer<typeof userSchema>;
 
 
-////////////////////////////Main function////////////////////////
+//////////////////////////// Main function ////////////////////////
 function SignUpForm() {
-
-    const { toast } = useToast();
+    const GITHUB_OAUTH_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID;
     
+   
+    const { toast } = useToast();
     const {
         register,
         handleSubmit,
@@ -51,42 +42,40 @@ function SignUpForm() {
         resolver: zodResolver(userSchema),
     });
 
-    //Router
+    //Using next router
     const router = useRouter();
 
-    //On submission of the signup form
-    const onSubmit = async (data: TSuserSchema) => {
 
+    //On form submission
+    const onSubmit = async (data: TSuserSchema) => {
         //Sending to the server
-        try{
-           const response = await axios.post('http://localhost:8000/api/company/join',_.pick(data,'name','email','password'));
-           if (!response.data.ok) {
-               toast({
-                   variant: "destructive",
-                   title: "Email asscociated with another organisation!",
-                   description: "Either you can login or use other email.",
+        try {
+            const response = await axios.post('http://localhost:8000/api/auth?=r', data);
+            console.log(response.data);
+            if (!response.data.ok) {
+                toast({
+                    variant: "destructive",
+                    title: "Wrong Credentials",
+                    description: "Check your email and password.",
                 })
                 
                 return;
             }
             toast({
-                title: "User Creation seccessful!",
-                description: "Now you can login with your email and password.",
+                title: "Login successfull!",
             })
-            const res = logIn(data);
-            if(await res){
-                router.push('/home');
-            }
-            reset();
-        }
-        catch(err){
+            router.push('/organisation');
+        } catch (err) {
             console.log(err);
             toast({
                 variant: "destructive",
                 title: "Something went wrong!",
                 description: "Please retry.",
             })
+            
         }
+
+
     }
 
     return (
@@ -98,13 +87,6 @@ function SignUpForm() {
                             <Label className="sr-only" htmlFor="email">
                                 Email
                             </Label>
-                            <Input
-                                {...register('name', { required: "name is required.", })}
-                                placeholder="Organisation name"
-                                type="text"
-                                disabled={isSubmitting}
-                                required={true}
-                            />
                             <Input
                                 {...register('email', { required: "Email is required.", })}
                                 placeholder="name@example.com"
@@ -125,37 +107,19 @@ function SignUpForm() {
                             {errors.password && (
                                 <p className='text-red-600'>{`${errors.password.message}`}</p>
                             )}
-                            <Input
-                                {...register('confirmPassword')}
-                                placeholder="Confirm password"
-                                type="password"
-                                disabled={isSubmitting}
-                                required={true}
-                            />
-                            {errors.confirmPassword && (
-                                <p className='text-red-600'>{`${errors.confirmPassword.message}`}</p>
-                            )}
+
                         </div>
-                        <Button  type="submit" disabled={isSubmitting} variant={"default"}>
+                        <Button variant={"default"} type="submit" disabled={isSubmitting}>
                             {isSubmitting && (
                                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                             )}
-                            Sign Up Organisation
+                            Log in with Email
                         </Button>
                     </div>
                 </form>
-                <div className='flex justify-center items-center flex-col'>
+                <div className='flex justify-center'>
 
-                    <p>Already registered your organisation ?</p>
-                    
-                    <Link 
-                    href='/login/organisaiton' 
-                    className={cn(
-                        buttonVariants({ variant: "secondary"}),
-                        "w-full mt-2",
-                      )}
-                    >Login
-                    </Link>
+                    <p>Don't have an account?<Link className=' ml-1 text-primary font-bold' href={'/signup'}> Sign Up!</Link></p>
                 </div>
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
@@ -167,7 +131,8 @@ function SignUpForm() {
                         </span>
                     </div>
                 </div>
-                <Button variant="outline" type="button" disabled={isSubmitting}>
+                <Button variant="outline" type="button" disabled={isSubmitting} 
+                >
                     {isSubmitting ? (
                         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
@@ -177,9 +142,9 @@ function SignUpForm() {
                 </Button>
                 <Toaster></Toaster>
             </div>
-            <OrgRegistration></OrgRegistration>
         </>
     )
 }
 
 export default SignUpForm;
+

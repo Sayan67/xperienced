@@ -64,7 +64,7 @@ function SignUpForm() {
             toast({
                 title: "Login successfull!",
             })
-            router.push('/home');
+            router.push('/organisation');
         } catch (err) {
             console.log(err);
             toast({

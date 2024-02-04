@@ -1,7 +1,7 @@
 
 import { Metadata } from "next"
 import Link from "next/link"
-
+import OrgLogInForm from "@/components/OrgLogInForm"
 
 import { ModeToggle } from "@/components/ModeToggle"
 import LogInForm from "@/components/LogInForm"
@@ -36,7 +36,7 @@ export default function LogInPage() {
                 </p>
               </div>
               {/* <UserAuthForm /> */}
-              <LogInForm/>
+              <OrgLogInForm/>
               <p className="px-8 text-center text-sm text-muted-foreground">
                 By clicking continue, you agree to our{" "}
                 <Link
