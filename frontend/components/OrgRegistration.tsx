@@ -11,13 +11,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from './ui/use-toast';
 import { Toaster } from './ui/toaster';
 import Link from 'next/link';
-import axs from 'axios';
-import logIn  from '@/app/api/logIn';
+import {axios} from '@/api/utils';
 import _ from 'underscore';
 import { useRouter } from 'next/navigation';
-const axios  = axs.create({
-    withCredentials: true,
-});
+
 
 
 const userSchema = z.object({
@@ -58,7 +55,7 @@ function SignUpForm() {
 
         //Sending to the server
         try{
-           const response = await axios.post('http://localhost:8000/api/company/join',_.pick(data,'name','email','password'));
+           const response = await axios.post('/api/company/join',_.pick(data,'name','email','password'));
            if (!response.data.ok) {
                toast({
                    variant: "destructive",
@@ -72,7 +69,16 @@ function SignUpForm() {
                 title: "User Creation seccessful!",
                 description: "Now you can login with your email and password.",
             })
-            axios.post('http://localhost:8000/api/auth?type=r',_.pick(data,'email','password'));
+            const res = await axios.post('api/auth?type=r',_.pick(data,'email','password'));
+            if (!res.data.ok) {
+                toast({
+                    variant: "destructive",
+                    title: "Something went wrong!",
+                    description: "Please retry.",
+                })
+                return;
+            }
+            router.push('http://localhost:3000/organisation/offers');
         }
         catch(err){
             console.log(err);

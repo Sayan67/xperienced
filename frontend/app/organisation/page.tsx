@@ -4,7 +4,6 @@ import Link from "next/link"
 import OrgLogInForm from "@/components/OrgLogInForm"
 
 import { ModeToggle } from "@/components/ModeToggle"
-import LogInForm from "@/components/LogInForm"
 
 
 export const metadata: Metadata = {
