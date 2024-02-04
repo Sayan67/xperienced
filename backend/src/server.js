@@ -7,7 +7,7 @@ import * as db from './db.js';
 import * as models from './models.js';
 import * as auth from './auth.js';
 import * as mid from './middleware.js';
-import { ProfileEditSchema, JoinSchema } from './schema.js'
+import { ProfileEditSchema, JoinSchema, OfferSchema } from './schema.js'
 import { StatusCodes } from 'http-status-codes'
 import dotenv from 'dotenv'
 import imagedb from './imagedb.js';
@@ -124,7 +124,7 @@ async (req, res) => {
 });
 
 app.post('/api/edit/profile', 
-    mid.validateSchema(ajv, ProfileEditSchema),
+    // mid.validateSchema(ajv, ProfileEditSchema),
 async (req, res) => {
     const { session } = req;
     await models.User.updateOne({ _id: session.uid }, req.body).exec();
@@ -132,9 +132,52 @@ async (req, res) => {
 });
 
 // Sends a job offer to an user on behalf of the company
-app.post('/api/offer', async (req, res) => {
+app.post('/api/com/offer', 
+    mid.validateSchema(ajv, OfferSchema),
+    mid.needRecruiter(),
+    mid.verifiedRecruiter(),
+async (req, res) => {
     
-    
+    const r = req.recruiter;
+    const { to } = req.body;
+    // Check if the user exists.
+    if (!(await models.Offer.findOne({ id: to }))) {
+        return res.status(StatusCodes.NOT_FOUND).send(`User ${to} not found`);
+    }
+    // Check if an offer exists.
+    if (await models.Offer.findOne({ from: r._id, to })) {
+        return res.status(StatusCodes.CONFLICT).send("An offer to this user already exists");
+    }
+    const offer = await models.Offer.create({ from: r._id, ...req.body});
+    return res.json({ ok: true, offer: offer.id });
+});
+
+app.get('/api/offer/respond', 
+    mid.needUser(),
+async (req, res) => {
+    const { id: offerId, response } = req.query;
+    // Get the offer
+    const offer = await models.Offer.findById(offerId).exec();
+    if (!offer) {
+        return res.status(StatusCodes.NOT_FOUND).send('Offer not found.');
+    }
+    // Check if the offer belongs to the user.
+    const { user } = req;
+    if (user.id != offer.to.id) {
+        return res.status(StatusCodes.FORBIDDEN).send();
+    }
+    // Accept the offer.
+    if (response == 'true') {
+        // TODOOOOOOOOOO
+    }
+
+    // Delete the offer.
+    await offer.deleteOne();
+    return res.json({ ok: true });
+});
+
+app.use((err, _, res, next) => {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.toString());
 });
 
 //uoploads the avatar of the company

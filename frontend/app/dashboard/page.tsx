@@ -8,43 +8,25 @@ import { faker } from '@faker-js/faker';
 import * as dummy from '@/lib/dummy';
 import { TiTick as TickIcon, TiTimes as CrossIcon } from 'react-icons/ti';
 import { AiOutlineSearch as SearchIcon } from 'react-icons/ai'
+import SubNav from '@/components/SubNav';
 
 export default function Dashboard() {
+    const actions = [{ name: 'Offers', href: '/dashboard' }, { name: 'Profile', href: '/profile' }]
     const offers = dummy.generateOffers(5);
     return (
         <div>
-            <div><SiteNav active='/dashboard' /></div>
-            <div className='flex-grow mb-8'><Nav></Nav></div>
+            <div><SiteNav active='/dashboard' actions={[
+                { name: 'Home', href: '/dashboard' },
+                { name: 'About', href: '/about' }
+            ]} /></div>
+            <div className='flex-grow mb-8'><SubNav url='/dashboard' actions={actions}></SubNav></div>
             <div className='flex flex-col items-center text-lg font-primary'>
                 <div className='md:w-2/3 lg:w-1/2'>
                     <OfferList offers={offers} />
                 </div>
             </div>
         </div>
-    )
-}
-
-
-export function Nav({ }) {
-    const actions = [{ name: 'Offers', href: '/dashboard/offers' }, { name: 'Settings', href: '/dashboard/settings' }]
-    return (
-        <nav className="flex justify-center py-4 bg-white border-b-[1px] border-neutral-300">
-            <div className='md:w-2/3 lg:w-1/2 flex gap-8 justify-between items-center'>
-                <div className='flex gap-8'>
-                    {
-                        actions.map(({ name, }, id) => (
-                            <div key={id} className='font-primary text-lg'>
-                                {name}
-                            </div>
-                        ))
-                    }
-                </div>
-                <div className='w-full flex justify-end'>
-                    <Search />
-                </div>
-            </div>
-        </nav>
-    )
+    );
 }
 
 export function Profile({ }) {
@@ -92,9 +74,9 @@ export function Offer({ offer }: { offer: any }) {
             <div className='font-primary text-base text-neutral-600 font-light'>{offer.description}</div>
             {/* <div>{offer}</div> */}
             <div className='flex gap-4'>
-                <button className='pos-btn flex items-center gap-2'><TickIcon size={24}/> Accept</button>
+                <button className='pos-btn flex items-center gap-2'><TickIcon size={24} /> Accept</button>
                 <button className='neg-btn flex items-center gap-2'>
-                    <CrossIcon size={24} className='text-neutral-500'/>
+                    <CrossIcon size={24} className='text-neutral-500' />
                     Decline
                 </button>
             </div>
@@ -113,7 +95,7 @@ export function Search() {
                     placeholder='Search'
                 />
                 <div className='h-full border-l-[1px] border-neutral-300 flex items-center px-3'>
-                    <SearchIcon size={24}/>
+                    <SearchIcon size={24} />
                 </div>
             </div>
         </div>
