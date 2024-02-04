@@ -5,8 +5,8 @@ const siteNavActions = [
     { name: 'About', href: '/about' },
 ];
 
-export default function OrgSiteNav({active} : {active: string}) {
+export default function OrgSiteNav({active, isr} : {active: string, isr: boolean}) {
     return (
-        <SiteNav actions={siteNavActions} active={active} />
+        <SiteNav actions={siteNavActions} active={active} isr={isr}/>
     )
 }

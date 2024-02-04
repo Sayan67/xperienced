@@ -1,18 +1,20 @@
-
-import { Metadata } from "next"
+'use client'
 import Link from "next/link"
 
 
 import { ModeToggle } from "@/components/ModeToggle"
 import LogInForm from "@/components/LogInForm"
 
-
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
-}
+import { useRouter } from "next/navigation"
+import { useRecruiter } from "@/api/auth"
 
 export default function LogInPage() {
+  const router = useRouter();
+  const { data, error, isLoading } = useRecruiter();
+  if (error || (!data && !isLoading)) {
+    router.push('/dashboard');
+    return; 
+  }
   return (
     <>
       <div className="flex items-center justify-center h-full w-full">

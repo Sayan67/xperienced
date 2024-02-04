@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { UserProvider } from "@/api/auth";
+import { RecruiterProvider, UserProvider } from "@/api/auth";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -26,16 +26,18 @@ export default function RootLayout({
 
       </head>
       <body>
-        <UserProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </UserProvider>
+        <RecruiterProvider>
+          <UserProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </UserProvider>
+        </RecruiterProvider>
       </body>
     </html>
   );
