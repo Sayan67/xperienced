@@ -15,7 +15,6 @@ import axs from 'axios';
 import logIn  from '@/app/api/logIn';
 import _ from 'underscore';
 import { useRouter } from 'next/navigation';
-import OrgRegistration from './OrgRegistration';
 const axios  = axs.create({
     withCredentials: true,
 });
@@ -177,7 +176,6 @@ function SignUpForm() {
                 </Button>
                 <Toaster></Toaster>
             </div>
-            <OrgRegistration></OrgRegistration>
         </>
     )
 }

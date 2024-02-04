@@ -28,7 +28,6 @@ type TSuserSchema = z.infer<typeof userSchema>;
 
 //////////////////////////// Main function ////////////////////////
 function SignUpForm() {
-    const GITHUB_OAUTH_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID;
     
    
     const { toast } = useToast();
