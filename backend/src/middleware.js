@@ -83,3 +83,12 @@ export function needRecruiter() {
         next();
     };
 }
+
+export function verifiedRecruiter() {
+    return async (req, res, next) => {
+        if (!req.recruiter.verified) {
+            return res.status(StatusCodes.FORBIDDEN).send('Recruiter must be verified');
+        }
+        next();
+    };    
+}
